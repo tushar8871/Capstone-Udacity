@@ -1,35 +1,42 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+executors:
+  node:
+  python:
     docker:
       - image: python:3.7.3-stretch
+      
+jobs:
+  install_dependency:
+    executor: python
     working_directory: ~/Capstone-Udacity
     steps:
-      - checkout
+      checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1--dependencies-{{ checksum "requirements.txt" }}
             - v1-dependencies-
-
+      
       - run:
-          name: install dependencies
-          command: |
+          commands: |
             python3 -m venv capstone
             . capstone/bin/activate
+            
+            #Install requirements to run application using Makefile
             make install
-            # Install hadolint
+            
+            #Install hadolint to lint Dockerfile
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
                 chmod +x /bin/hadolint
+      
       - save_cache:
           paths:
-            - ./capstone
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-
-      # run lint!
-      - run:
-          name: run lint
-          command: |
-            . capstone/bin/activate
-            make lint
-            docker images
-            docker ps -a
+            ./capstone
+          key: v1--dependencies-{{ checksum "requirements.txt" }}
+          
+          
+workflows:
+  version: 2
+  Capstone:
+    jobs:
+      install_dependency
