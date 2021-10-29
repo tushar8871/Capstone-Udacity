@@ -31,3 +31,5 @@ jobs:
           command: |
             . capstone/bin/activate
             make lint
+            docker images
+            docker ps -a
