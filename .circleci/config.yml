@@ -11,7 +11,7 @@ jobs:
     executor: python
     working_directory: ~/Capstone-Udacity
     steps:
-      checkout
+      - checkout
       - restore_cache:
           keys:
             - v1--dependencies-{{ checksum "requirements.txt" }}
