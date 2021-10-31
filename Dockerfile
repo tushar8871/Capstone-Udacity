@@ -1,4 +1,4 @@
-FROM python:3.7.3-stretch
+FRO python:3.7.3-stretch
 
 ## Complete Step 1:
 # Create a Working Directory
@@ -15,7 +15,7 @@ RUN pip install --upgrade pip &&\
 	pip install --trusted-host pypi.python.org -r requirements.txt
 
 ## Complete Step 4:
-expose 8080
+Expose 8080
 
 ## Complete Step 5:
 # Run app.py at container launch
