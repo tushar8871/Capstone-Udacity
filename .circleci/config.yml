@@ -53,8 +53,7 @@ jobs:
   build_docker:
     executor: docker-image
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
       - setup_remote_docker
       - run:
           name: Building Docker Image and Pushing to DockerHub
@@ -70,8 +69,7 @@ jobs:
   create_infrastructure:
     executor: aws
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
       - run:
           name: Creating Network for EKS
           command: |
