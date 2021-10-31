@@ -49,12 +49,14 @@ jobs:
   build_docker:
     executor: python
     steps:
+      - checkout
       - attach_workspace:
           at: .
       - setup_remote_docker
       - run:
           name: Building Docker Container
           command: |
+           make setup
             . capstone/bin/activate
             pip install docker
             docker --version
