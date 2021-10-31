@@ -52,6 +52,7 @@ jobs:
           name: Building Docker Container
           command: |
             . capstone/bin/activate
+            make install
             docker rm app
             docker build -t app:${CIRCLE_WORKFLOW_ID:0:5} .
             docker images
