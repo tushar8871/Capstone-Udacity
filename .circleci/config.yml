@@ -58,8 +58,8 @@ jobs:
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
             Prev_Tag=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
-            docker images
-            docker rmi app:$Prev_Tag
+            #docker images
+            #docker rmi app:$Prev_Tag
             docker build -t app:$TAG .
             docker images
           
