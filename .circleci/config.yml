@@ -12,11 +12,6 @@ jobs:
     working_directory: ~/Capstone-Udacity
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1--dependencies-{{ checksum "requirements.txt" }}
-            - v1-dependencies-
-      
       - run:
           name: Install Dependencies
           command: |
@@ -25,20 +20,17 @@ jobs:
             
             #Install requirements to run application using Makefile
             make install
+      - persist_to_workspace:
+         root: ./Capstone
+         paths:
+           -  ~/Capstone-Udacity
       
-      - save_cache:
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-          paths:
-            - capstone/
-
   linting:
     executor: python
     working_directory: ~/Capstone-Udacity
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1--dependencies-{{ checksum "requirements.txt" }}
+      - attach_workspace:
+          at: ./Capstone
       - run:
           name: Liniting Python code and Dockerfile
           command: |
@@ -49,10 +41,6 @@ jobs:
                 chmod +x /bin/hadolint
             make lint
            
-      - save_cache:
-          paths:
-            - capstone/
-          key: v1-dependencies-{{ checksum "requirements.txt" }}    
           
 workflows:
   version: 2
