@@ -21,7 +21,7 @@ jobs:
             #Install requirements to run application using Makefile
             make install
       - persist_to_workspace:
-         root: ./Capstone
+         root: .
          paths:
            -  ~/Capstone-Udacity
       
@@ -30,11 +30,12 @@ jobs:
     working_directory: ~/Capstone-Udacity
     steps:
       - attach_workspace:
-          at: ./Capstone
+          at: .
       - run:
           name: Liniting Python code and Dockerfile
           command: |
             ls -alrth
+            cd Capstone-Udacity
             ls -larth | grep capstone/bin/
             #Install hadolint to lint Dockerfile
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
