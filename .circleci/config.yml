@@ -62,14 +62,15 @@ jobs:
       - run:
           name: Building Docker Container
           command: |
-#           make setup
-#            . capstone/bin/activate
-#            pip install docker
             docker --version
             TAG=0.1.$CIRCLE_BUILD_NUM
             #docker rm app
             docker build -t app:$TAG .
             docker images
+#           make setup
+#            . capstone/bin/activate
+#            pip install docker
+
           
 workflows:
   version: 2
