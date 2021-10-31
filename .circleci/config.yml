@@ -10,7 +10,7 @@ executors:
       - image: python:3.7.3-stretch
   docker-image:
     docker:
-      - image: circleci/golang:1.15
+      - image: docker:17.05.0-ce-git
       
 jobs:
   install_dependency:
@@ -51,15 +51,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: Installing Docker
-          command: |
-            apk add --update docker
-            docker --version
+      - setup_remote_docker
       - run:
           name: Building Docker Container
           command: |
             . capstone/bin/activate
+            docker --version
             TAG=0.1.$CIRCLE_BUILD_NUM
             #docker rm app
             docker build -t app:$TAG .
