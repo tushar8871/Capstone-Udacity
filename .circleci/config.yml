@@ -34,22 +34,29 @@ jobs:
           paths:
             - ./capstone
           key: v1-dependencies-{{ checksum "requirements.txt" }}
+      
+      - persist_to_workspace:
+          root: .
+          paths:
+            - capstone/
           
   linting:
     executor: python
     working_directory: ~/Capstone-Udacity
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - restore_cache:
           keys:
             - v1--dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Liniting Python code and Dockerfile
           command: |
+            make setup
             . capstone/bin/activate
             make lint
-            hadolint Dockerfile
-      
+           
       - save_cache:
           paths:
             - ./capstone
