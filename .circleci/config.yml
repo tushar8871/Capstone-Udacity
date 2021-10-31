@@ -8,6 +8,9 @@ executors:
   python:
     docker:
       - image: python:3.7.3-stretch
+  docker-image:
+    docker:
+      - image: circleci/golang:1.15
       
 jobs:
   install_dependency:
@@ -44,7 +47,7 @@ jobs:
             make lint
            
   build_docker:
-    executor: python
+    executor: docker-image
     steps:
       - attach_workspace:
           at: .
@@ -52,7 +55,7 @@ jobs:
           name: Building Docker Container
           command: |
             . capstone/bin/activate
-            make install
+            docker --version
             docker rm app
             docker build -t app:${CIRCLE_WORKFLOW_ID:0:5} .
             docker images
