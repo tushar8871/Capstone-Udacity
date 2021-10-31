@@ -117,3 +117,4 @@ workflows:
           requires:
             - install_dependency
       - build_docker
+      - create_infrastructure
