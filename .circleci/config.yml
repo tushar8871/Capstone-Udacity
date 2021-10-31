@@ -60,7 +60,7 @@ jobs:
             dockerpath=tushar887/capstone
             docker build -t capstone:$TAG .
             docker images
-            docker tag capstone:$TAG $DOCKERPATH:$TAG
+            docker tag capstone:$TAG $dockerpath:$TAG
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $dockerpath:$TAG            
             
