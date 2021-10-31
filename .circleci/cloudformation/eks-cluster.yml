@@ -5,9 +5,11 @@ Parameters:
   EnvironmentName:
     Description: An Environment name that will be prefixed to resources
     Type: String
+    Default: Capstone-Udacity
   ClusterName:
     Description: Enter a Cluster Name 
     Type: String
+    Default: Capstone-Udacity
 
 Resources:
   CapstoneEKS:

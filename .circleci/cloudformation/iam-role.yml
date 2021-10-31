@@ -5,10 +5,13 @@ Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
+    Default: Capstone-Udacity
   EKSUserName:
     Type: String
+    Default: capstone
   EKSRoleName:
     Type: String
+    Default: capstone
 
 Resources:
 

@@ -5,26 +5,32 @@ Parameters:
   EnvironmentName:
     Description: An Environment name that will be prefixed to resources
     Type: String
+    Default: Capstone-Udacity
 
   ImageID:
     Description: An image ID for EC2 Instance
     Type: String
+    Default: ami-09e67e426f25ce0d7
 
   KeyPairName:
     Description: The EC2 Key Pair to allow SSH access to the instances
     Type: AWS::EC2::KeyPair::KeyName
+    Default: Udacity_IAC
 
   DesiredInstances:
     Description: How many instances should be created.
     Type: Number
+    Default: 2
 
   MinSize:
     Description: Minimum number of web application servers
-    Type: String
+    Type: Number
+    Default: 1
 
   MaxSize:
     Description: Maximum number of web application servers
-    Type: String
+    Type: Number
+    Default: 3
 
 Resources:
   NodesSG:
