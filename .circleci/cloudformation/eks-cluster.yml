@@ -1,0 +1,41 @@
+Description: >
+  Tushar Khachane 
+  Capstone project for Cloud DevOps Engineering Nanodegree
+Parameters:
+  EnvironmentName:
+    Description: An Environment name that will be prefixed to resources
+    Type: String
+  ClusterName:
+    Description: Enter a Cluster Name 
+    Type: String
+
+Resources:
+  CapstoneEKS:
+    Type: AWS::EKS::Cluster
+    Properties:
+      Version: "1.13"
+      RoleArn: 
+        - Fn::ImportValue: !Sub "${EnvironmentName}-IAM-Role"
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+          - Fn::ImportValue: !Sub "${EnvironmentName}-Security-Group"
+        SubnetIds:
+          Fn::Split:
+            - ","
+            - Fn::ImportValue:
+                Fn::Sub: ${EnvironmentName}-PUB-SUBNET
+      Tags:
+        - Key: Name
+          Value: !Sub ${ClusterName} 
+          
+Outputs:
+  EksId:
+    Description: The EKS id.
+    Value: !Ref eks-cluster
+    Export:
+      Name: !Sub ${EnvironmentName}-EKS-Cluster-Id
+  EksName:
+    Description: The EKS id.
+    Value: !Ref eks-cluster
+    Export:
+      Name: !Sub ${EnvironmentName}-EKS-Cluster-Name

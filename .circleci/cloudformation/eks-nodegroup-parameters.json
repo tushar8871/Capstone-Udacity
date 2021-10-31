@@ -1,0 +1,26 @@
+[
+    {
+      "ParameterKey": "EnvironmentName",
+      "ParameterValue": "Capstone-Udacity"
+    },
+    {
+      "ParameterKey": "KeyPairName",
+      "ParameterValue": "Udacity_IAC"
+    },
+    {
+      "ParameterKey": "DesiredInstances",
+      "ParameterValue": "2"
+    },
+    {
+      "ParameterKey": "ImageID",
+      "ParameterValue": "ami-09e67e426f25ce0d7"
+    },
+    {
+      "ParameterKey": "MinSize",
+      "ParameterValue": "1"
+    },
+    {
+      "ParameterKey": "MaxSize",
+      "ParameterValue": "3"
+    }
+  ]

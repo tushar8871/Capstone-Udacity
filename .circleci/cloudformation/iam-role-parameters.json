@@ -1,0 +1,14 @@
+[
+    {
+      "ParameterKey": "EnvironmentName",
+      "ParameterValue": "Capstone-Udacity"
+    },
+    {
+      "ParameterKey": "EKSUserName",
+      "ParameterValue": "capstone"
+    },
+    {
+      "ParameterKey": "EKSRoleName",
+      "ParameterValue": "capstone"
+    }
+]

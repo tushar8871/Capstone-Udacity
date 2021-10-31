@@ -11,6 +11,10 @@ executors:
   docker-image:
     docker:
       - image: docker:17.05.0-ce-git
+  aws:
+    docker:
+      - image: amazon/aws-cli
+
       
 jobs:
   install_dependency:
@@ -49,7 +53,6 @@ jobs:
   build_docker:
     executor: docker-image
     steps:
-      - checkout
       - attach_workspace:
           at: .
       - setup_remote_docker
@@ -62,7 +65,48 @@ jobs:
             docker images
             docker tag capstone:$TAG $dockerpath:$TAG
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
-            docker push $dockerpath:$TAG            
+            docker push $dockerpath:$TAG
+    
+  create_infrastructure:
+    executor: aws
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Creating Network for EKS
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/cloudformation/network.yml \
+              --stack-name "capstone-network-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
+              --tags project=capstone-network-udacity-${CIRCLE_WORKFLOW_ID:0:5}
+
+      - run:
+          name: Creating IAM Role for EKS
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/cloudformation/iam-role.yml \
+              --stack-name "capstone-iam-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
+              --tags project=capstone-iam-role-udacity-${CIRCLE_WORKFLOW_ID:0:5}
+
+      - run:
+          name: Creating EKS Cluster
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/cloudformation/eks-cluster.yml \
+              --stack-name "capstone-eks-cluster-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
+              --tags project=capstone-eks-cluster-udacity-${CIRCLE_WORKFLOW_ID:0:5}
+
+      - run:
+          name: Creating Node Group
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/cloudformation/eks-node-group.yml \
+              --stack-name "capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
+              --tags project=capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}
             
 workflows:
   version: 2
