@@ -23,7 +23,7 @@ jobs:
       - persist_to_workspace:
          root: .
          paths:
-           -  ~/Capstone-Udacity
+           -  .
       
   linting:
     executor: python
