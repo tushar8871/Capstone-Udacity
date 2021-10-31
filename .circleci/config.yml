@@ -53,33 +53,22 @@ jobs:
       - attach_workspace:
           at: .
       - setup_remote_docker
-#      - run:
-##          name: Install Docker
-#          command: |
-#            sudo curl -L -o /usr/bin/docker 'http://s3-external-1.amazonaws.com/circle-downloads/docker-1.8.2-circleci'
-#            sudo chmod 0755 /usr/bin/docker
-#            docker --version
       - run:
           name: Building Docker Container
           command: |
-            docker --version
             TAG=0.1.$CIRCLE_BUILD_NUM
-            #docker rm app
+            Prev_Tag: 0.1.$CIRCLE_PREVIOUS_BUILD_NUM
+            docker images
+            docker rmi app:$Prev_Tag
             docker build -t app:$TAG .
             docker images
-#           make setup
-#            . capstone/bin/activate
-#            pip install docker
-
           
 workflows:
   version: 2
   Capstone:
     jobs:
-#      - install_dependency
-#      - linting:
-#          requires:
-#            - install_dependency
-      - build_docker #:
- #         requires:
-#            - install_dependency
+      - install_dependency
+      - linting:
+          requires:
+            - install_dependency
+      - build_docker
