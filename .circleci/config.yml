@@ -47,17 +47,20 @@ jobs:
             make lint
            
   build_docker:
-    executor: docker-image
+    executor: python
     steps:
       - attach_workspace:
           at: .
       - run:
+          name: Installing Docker
+          command: |
+            apk add --update docker
+            docker --version
+      - run:
           name: Building Docker Container
           command: |
             . capstone/bin/activate
-            apk add docker-cli
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker --version
             #docker rm app
             docker build -t app:$TAG .
             docker images
