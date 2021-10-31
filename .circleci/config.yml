@@ -61,7 +61,7 @@ jobs:
             docker build -t capstone:$TAG .
             docker images
             docker tag capstone:$TAG $dockerpath:$TAG
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
             docker push $dockerpath:$TAG            
             
 workflows:
