@@ -52,7 +52,7 @@ jobs:
           command: |
             . capstone/bin/activate
             docker rm app
-            docker build -t app:-${CIRCLE_WORKFLOW_ID:0:5} .
+            docker build -t app:${CIRCLE_WORKFLOW_ID:0:5} .
             docker images
           
 workflows:
