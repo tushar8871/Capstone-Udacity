@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  welcome: circleci/welcome-orb@0.4.1
+
 executors:
   node:
   python:
@@ -27,7 +30,6 @@ jobs:
       
   linting:
     executor: python
-    working_directory: ~/Capstone-Udacity
     steps:
       - attach_workspace:
           at: .
@@ -40,6 +42,18 @@ jobs:
                 chmod +x /bin/hadolint
             make lint
            
+  build_docker:
+    executor: python
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Building Docker Container
+          command: |
+            . capstone/bin/activate
+            docker rm app
+            docker build -t app:-${CIRCLE_WORKFLOW_ID:0:5} .
+            docker images
           
 workflows:
   version: 2
@@ -49,3 +63,6 @@ workflows:
       - linting:
           requires:
             - install_dependency
+      - build_docker:
+          requires:
+            - linting
