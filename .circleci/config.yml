@@ -54,15 +54,16 @@ jobs:
           at: .
       - setup_remote_docker
       - run:
-          name: Building Docker Container
+          name: Building Docker Image and Pushing to DockerHub
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            Prev_Tag=0.1.$CIRCLE_PREVIOUS_BUILD_NUM
+            dockerpath=tushar887/capstone
+            docker build -t capstone:$TAG .
             docker images
-            docker build -t app:$TAG .
-            docker rmi app:$Prev_Tag
-            docker images
-          
+            docker tag capstone:$TAG $DOCKERPATH:$TAG
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $dockerpath:$TAG            
+            
 workflows:
   version: 2
   Capstone:
