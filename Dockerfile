@@ -1,4 +1,4 @@
-FRO python:3.7.3-stretch
+FROM python:3.7.3-stretch
 
 ## Complete Step 1:
 # Create a Working Directory
