@@ -18,7 +18,7 @@ jobs:
             - v1-dependencies-
       
       - run:
-          commands: |
+          command: |
             python3 -m venv capstone
             . capstone/bin/activate
             
