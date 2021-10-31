@@ -110,9 +110,9 @@ workflows:
   version: 2
   Capstone:
     jobs:
-      - install_dependency
-      - linting:
-          requires:
-            - install_dependency
-      - build_docker
+#      - install_dependency
+#      - linting:
+#          requires:
+#            - install_dependency
+#      - build_docker
       - create_infrastructure
