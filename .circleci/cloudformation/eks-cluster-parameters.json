@@ -2,9 +2,5 @@
     {
       "ParameterKey": "EnvironmentName",
       "ParameterValue": "Capstone-Udacity"
-    },
-    {
-      "ParameterKey": "ClusterName",
-      "ParameterValue": "Capstone-Udacity"
     }
 ]

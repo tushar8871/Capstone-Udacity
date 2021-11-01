@@ -6,18 +6,13 @@ Parameters:
     Description: An Environment name that will be prefixed to resources
     Type: String
     Default: Capstone-Udacity
-  ClusterName:
-    Description: Enter a Cluster Name 
-    Type: String
-    Default: Capstone-Udacity
-
+  
 Resources:
   CapstoneEKS:
     Type: AWS::EKS::Cluster
     Properties:
-      Version: "1.13"
-      RoleArn: 
-        - Fn::ImportValue: !Sub "${EnvironmentName}-IAM-Role"
+      RoleArn: !ImportValue 
+        "Fn::Sub": "${EnvironmentName}-IAM-Role"
       ResourcesVpcConfig:
         SecurityGroupIds:
           - Fn::ImportValue: !Sub "${EnvironmentName}-Security-Group"
@@ -26,18 +21,20 @@ Resources:
             - ","
             - Fn::ImportValue:
                 Fn::Sub: ${EnvironmentName}-PUB-SUBNET
-      Tags:
-        - Key: Name
-          Value: !Sub ${ClusterName} 
           
 Outputs:
+  Eksarn:
+    Description: The EKS id.
+    Value: !GetAtt CapstoneEKS.Arn
+    Export:
+      Name: !Sub ${EnvironmentName}-EKS-Cluster-ARN
+  EksEndpoint:
+    Description: The EKS enpoint url
+    Value: !GetAtt CapstoneEKS.Endpoint
+    Export:
+      Name: !Sub ${EnvironmentName}-EKS-URL
   EksId:
     Description: The EKS id.
-    Value: !Ref eks-cluster
+    Value: !Ref CapstoneEKS
     Export:
-      Name: !Sub ${EnvironmentName}-EKS-Cluster-Id
-  EksName:
-    Description: The EKS id.
-    Value: !Ref eks-cluster
-    Export:
-      Name: !Sub ${EnvironmentName}-EKS-Cluster-Name
+      Name: !Sub ${EnvironmentName}-EKS

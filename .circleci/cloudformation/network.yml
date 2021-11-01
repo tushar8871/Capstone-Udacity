@@ -12,15 +12,15 @@ Parameters:
     Type: String
     Default: 10.0.0.0/16
 
-  PublicSubnet1:
+  PubSubnet1:
     Description: Enter CIDR notation for the public subnet in the first Availability Zone
     Type: String
-    Default: 10.0.0.1/24
+    Default: 10.0.1.0/24
 
-  PublicSubnet2:
+  PubSubnet2:
     Description: Enter CIDR notation for the public subnet in the second Availability Zone
     Type: String
-    Default: 10.0.0.2/24
+    Default: 10.0.2.0/24
 
 Resources:
   VPC:
@@ -50,7 +50,7 @@ Resources:
       MapPublicIpOnLaunch: true
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PublicSubnet1
+      CidrBlock: !Ref PubSubnet1
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Public Subnet 1
@@ -61,7 +61,7 @@ Resources:
       MapPublicIpOnLaunch: true
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PublicSubnet2
+      CidrBlock: !Ref PubSubnet2
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Public Subnet 2
@@ -74,7 +74,7 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvironmentName} Route Table
 
-  DefaultPublicRoute:
+  PublicRoute:
     Type: AWS::EC2::Route
     DependsOn: InternetGatewayAttachment
     Properties:
@@ -95,11 +95,11 @@ Resources:
       SubnetId: !Ref PublicSubnet2
 
 
-  DefaultSecurityGroup:
+  SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !Ref VPC
-      GroupDescription: Default security group for EKS.
+      GroupDescription: Security group for EKS.
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -127,13 +127,13 @@ Outputs:
   PublicSubnets:
     Description: A list of the public subnets
     Value:
-      !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2, !Ref PublicSubnet3]]
+      !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2]]
     Export:
       Name: !Sub ${EnvironmentName}-PUB-SUBNET
 
   SecurityGroup:
     Description: Cluster security group.
-    Value: !Ref DefaultSecurityGroup
+    Value: !Ref SecurityGroup
     Export:
       Name: !Sub ${EnvironmentName}-Security-Group
 

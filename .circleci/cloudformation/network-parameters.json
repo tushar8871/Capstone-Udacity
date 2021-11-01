@@ -8,11 +8,11 @@
       "ParameterValue": "10.0.0.0/16"
     },
     {
-      "ParameterKey": "PublicSubnet1",
-      "ParameterValue": "10.0.0.1/24"
+      "ParameterKey": "PubSubnet1",
+      "ParameterValue": "10.0.1.0/24"
     },
     {
-      "ParameterKey": "PublicSubnet2",
-      "ParameterValue": "10.0.0.2/24"
+      "ParameterKey": "PubSubnet2",
+      "ParameterValue": "10.0.2.0/24"
     }
 ]
