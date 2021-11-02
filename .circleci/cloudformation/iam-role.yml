@@ -40,8 +40,3 @@ Outputs:
     Export:
       Name: !Sub ${EnvironmentName}-IAM-Role
   
-  EKSRoleName:
-    Value: !GetAtt EKSRole.RoleName
-    Description: RoleName of EKS Role
-    Export:
-      Name: !Sub ${EnvironmentName}-Role-Name

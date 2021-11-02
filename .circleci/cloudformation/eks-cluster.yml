@@ -6,11 +6,16 @@ Parameters:
     Description: An Environment name that will be prefixed to resources
     Type: String
     Default: Capstone-Udacity
+  EKSClusterName:
+    Description: Cluster Name 
+    Type: String
+    Default: Capstone
   
 Resources:
   CapstoneEKS:
     Type: AWS::EKS::Cluster
     Properties:
+      Name: !Ref EKSClusterName
       RoleArn: !ImportValue 
         "Fn::Sub": "${EnvironmentName}-IAM-Role"
       ResourcesVpcConfig:
@@ -24,7 +29,7 @@ Resources:
           
 Outputs:
   Eksarn:
-    Description: The EKS id.
+    Description: The EKS ARN
     Value: !GetAtt CapstoneEKS.Arn
     Export:
       Name: !Sub ${EnvironmentName}-EKS-Cluster-ARN

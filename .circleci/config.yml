@@ -14,6 +14,9 @@ executors:
   aws:
     docker:
       - image: amazon/aws-cli
+  ubuntu:
+    docker:
+      - image: cimg/base:2021.04
 
       
 jobs:
@@ -106,6 +109,21 @@ jobs:
               --stack-name "capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
               --tags project=capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}
+      
+  connect_to_cluster:
+    executor: ubuntu
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command:  |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+            echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+            chmod +x kubectl
+            mkdir -p ~/.local/bin/kubectl
+            mv ./kubectl ~/.local/bin/kubectl
+            kubectl version --client
             
 workflows:
   version: 2

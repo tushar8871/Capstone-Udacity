@@ -2,5 +2,9 @@
     {
       "ParameterKey": "EnvironmentName",
       "ParameterValue": "Capstone-Udacity"
+    },
+    {
+      "ParameterKey": "EKSClusterName",
+      "ParameterValue": "Capstone"
     }
 ]

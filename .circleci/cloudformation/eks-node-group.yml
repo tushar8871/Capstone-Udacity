@@ -7,10 +7,15 @@ Parameters:
     Type: String
     Default: Capstone-Udacity
 
-  ImageID:
+  AMIID:
     Description: An image ID for EC2 Instance
     Type: String
     Default: ami-09e67e426f25ce0d7
+
+  KeyPairName:
+    Description: A key to access EC2 Instance
+    Type: String
+    Default: Udacity_IAC
 
   DesiredInstances:
     Description: How many instances should be created.
@@ -33,27 +38,132 @@ Resources:
     Properties:
       Path: "/"
       Roles:
-        - "capstone-iam-role-udacity-EKSRole-1DZMAADK34CZD"
-
-  EKSNodegroup:
-    Type: 'AWS::EKS::Nodegroup'
+        - !Ref NodeInstanceRole
+  NodeInstanceRole:
+    Type: AWS::IAM::Role
     Properties:
-      ClusterName: prod
-      NodeRole: !ImportValue 
-        "Fn::Sub": "${EnvironmentName}-IAM-Role"
-      ScalingConfig:
-        MinSize: !Ref MinimunSize
-        DesiredSize: !Ref DesiredInstances
-        MaxSize: !Ref MaximumSize
-      Subnets:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+  
+  NodeSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for the nodes.
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 1025
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 1025
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: !Sub
+            - "kubernetes.io/cluster/${EksId}"
+            - EksId:
+                Fn::ImportValue: !Sub "${EnvironmentName}-EKS"
+          Value: "owned"
+
+  NodeLaunchConfig:
+    Type: "AWS::AutoScaling::LaunchConfiguration"
+    Properties:
+      AssociatePublicIpAddress: "true"
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            DeleteOnTermination: true
+            VolumeSize: 10
+            VolumeType: gp2
+      IamInstanceProfile: !Ref NodeInstanceProfile
+      ImageId: !Ref AMIID
+      InstanceType: t3.small
+      KeyName: !Ref KeyPairName
+      SecurityGroups:
+        - Ref: NodeSecurityGroup
+      UserData:
+        Fn::Base64: !Sub
+          - |
+            #!/bin/bash
+            set -o xtrace
+            /etc/eks/bootstrap.sh ${EksId}
+            /opt/aws/bin/cfn-signal --exit-code $? \
+                     --stack  ${AWS::StackName} \
+                     --resource NodeGroup  \
+                     --region ${AWS::Region}
+          - EksId:
+              Fn::ImportValue: !Sub "${EnvironmentName}-EKS"
+
+  NodeGroup:
+    Type: "AWS::AutoScaling::AutoScalingGroup"
+    Properties:
+      DesiredCapacity: !Ref DesiredInstances
+      LaunchConfigurationName: !Ref NodeLaunchConfig
+      MaxSize: !Ref MaximumSize
+      MinSize: !Ref MinimumSize
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - "${EksId}-CapstoneNodesGroup"
+            - EksId:
+                Fn::ImportValue: !Sub "${EnvironmentName}-EKS"
+          PropagateAtLaunch: "true"
+        - Key: !Sub
+            - "kubernetes.io/cluster/${EksId}"
+            - EksId:
+                Fn::ImportValue: !Sub "${EnvironmentName}-EKS"
+          Value: "owned"
+          PropagateAtLaunch: "true"
+      VPCZoneIdentifier:
         Fn::Split:
           - ","
           - Fn::ImportValue:
-              Fn::Sub: ${EnvironmentName}-PUB-SUBNET 
-  
+              Fn::Sub: ${EnvironmentName}-PUB-SUBNET
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MaxBatchSize: "1"
+        MinInstancesInService: !Ref MinimumSize
+        PauseTime: PT5M
+        
 Outputs:
   NodesSecurityGroup:
     Description: The security group for the nodes.
-    Value: !Ref NodesSG
+    Value: !Ref NodeSecurityGroup
     Export:
       Name: !Sub ${EnvironmentName}-NSG
+  NodesInstanceRole:
+    Description: Instance Role Arn
+    Value: !GetAtt NodeInstanceRole.Arn
+    Export:
+      Name: !Sub ${EnvironmentName}-NodeInstanceRole
