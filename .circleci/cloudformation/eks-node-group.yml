@@ -10,8 +10,8 @@ Parameters:
   AMIID:
     Description: An image ID for EC2 Instance
     Type: String
-    Default: ami-09e67e426f25ce0d7
-
+    Default: ami-0c385d0d99fce057d
+    
   KeyPairName:
     Description: A key to access EC2 Instance
     Type: String

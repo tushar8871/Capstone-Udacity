@@ -13,7 +13,7 @@
     },
     {
       "ParameterKey": "AMIID",
-      "ParameterValue": "ami-09e67e426f25ce0d7"
+      "ParameterValue": "ami-0c385d0d99fce057d"
     },
     {
       "ParameterKey": "MinSize",

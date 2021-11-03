@@ -68,47 +68,6 @@ jobs:
             docker tag capstone:$TAG $dockerpath:$TAG
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
             docker push $dockerpath:$TAG
-    
-  create_infrastructure:
-    executor: aws
-    steps:
-      - checkout
-      - run:
-          name: Creating Network for EKS
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/cloudformation/network.yml \
-              --stack-name "capstone-network-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
-              --tags project=capstone-network-udacity-${CIRCLE_WORKFLOW_ID:0:5}
-
-      - run:
-          name: Creating IAM Role for EKS
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/cloudformation/iam-role.yml \
-              --stack-name "capstone-iam-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
-              --tags project=capstone-iam-role-udacity-${CIRCLE_WORKFLOW_ID:0:5} \
-              --capabilities CAPABILITY_NAMED_IAM
-
-      - run:
-          name: Creating EKS Cluster
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/cloudformation/eks-cluster.yml \
-              --stack-name "capstone-eks-cluster-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
-              --tags project=capstone-eks-cluster-udacity-${CIRCLE_WORKFLOW_ID:0:5}
-
-      - run:
-          name: Creating Node Group
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/cloudformation/eks-node-group.yml \
-              --stack-name "capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}" \
-              --tags project=capstone-eks-nodegroup-udacity-${CIRCLE_WORKFLOW_ID:0:5}
       
   connect_to_cluster:
     executor: ubuntu
@@ -124,6 +83,12 @@ jobs:
             mkdir -p ~/.local/bin/kubectl
             mv ./kubectl ~/.local/bin/kubectl
             kubectl version --client
+            sudo apt-get install awscli -y 
+            aws --version
+      - run:
+          name: Connecting cluster and Worker node
+          commnad: |
+            aws eks update-kubeconfig --name Capstone
             
 workflows:
   version: 2
