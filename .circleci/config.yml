@@ -90,6 +90,7 @@ jobs:
           commnad: |
             aws eks update-kubeconfig --name Capstone
             
+            
 workflows:
   version: 2
   Capstone:
@@ -99,4 +100,4 @@ workflows:
 #          requires:
 #            - install_dependency
 #      - build_docker
-      - create_infrastructure
+#      - create_infrastructure
