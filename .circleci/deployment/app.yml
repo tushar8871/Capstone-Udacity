@@ -21,7 +21,7 @@ spec:
         app: capstone
     spec:
       containers:
-        - image: tushar887/capstone:0.1.86
+        - image: tushar887/capstone
           imagePullPolicy: Never
           name: capstone
           ports:
