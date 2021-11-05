@@ -94,7 +94,7 @@ jobs:
             kubectl get nodes
             cd .circleci/deployment
             kubectl apply -f app.yml
-            kubectl describe po (kubectl get po -o=name | grep capstone)
+            kubectl describe pods $(kubectl get po -o=name | grep capstone)
 #            kubectl wait --for=condition=available --timeout=300s --all deployments        
 workflows:
   version: 2
