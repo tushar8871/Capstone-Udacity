@@ -1,0 +1,20 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: prod
+  region: us-east-1   
+nodeGroups:
+  - name: ng-1
+    instanceType: t3.small
+    desiredCapacity: 2
+    privateNetworking: true
+vpc:
+  subnets:
+    private:
+      us-east-1a:
+        id: "subnet-05c03a319fc859874"
+      us-east-1b:
+        id: "subnet-0495cb15b546acb4f"
+  clusterEndpoints:
+    publicAccess:  true
+    privateAccess: true

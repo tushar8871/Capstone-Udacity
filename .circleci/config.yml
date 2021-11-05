@@ -87,10 +87,12 @@ jobs:
             aws --version
       - run:
           name: Connecting cluster and Worker node
+          working_directory: ./.circleci/deployment/
           commnad: |
-            aws eks update-kubeconfig --name Capstone
-            
-            
+            aws eks update-kubeconfig --name prod
+            kubectl apply -f app.yml
+            kubectl wait --for=condition=available --timeout=300s --all deployments
+                        
 workflows:
   version: 2
   Capstone:
@@ -101,3 +103,4 @@ workflows:
 #            - install_dependency
 #      - build_docker
 #      - create_infrastructure
+       - connect_to_cluster
