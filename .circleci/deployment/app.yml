@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - image: tushar887/capstone
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           name: capstone
           ports:
             - containerPort: 8080
@@ -40,5 +40,5 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
-      nodePort: 30000
+      #nodePort: 30000
       protocol: TCP
