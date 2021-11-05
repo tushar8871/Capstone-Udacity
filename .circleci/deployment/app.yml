@@ -21,8 +21,8 @@ spec:
         app: capstone
     spec:
       containers:
-        - image: tushar887/capstone
-          imagePullPolicy: Always
+        - image: tushar887/capstone:0.1.86
+          imagePullPolicy: Never
           name: capstone
           ports:
             - containerPort: 8080
