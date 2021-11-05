@@ -65,7 +65,7 @@ jobs:
             dockerpath=tushar887/capstone
             docker build -t capstone:latest .
             docker images
-            docker tag capstone:$TAG $dockerpath:latest
+            docker tag capstone:latest $dockerpath:latest
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
             docker push $dockerpath:latest
       
