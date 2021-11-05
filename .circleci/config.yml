@@ -92,10 +92,10 @@ jobs:
           command: |
             aws eks update-kubeconfig --name prod
             kubectl get nodes
-            ls -lart
-#            kubectl apply -f app.yml
-#            kubectl logs (kubectl get po -o=name | grep capstone)
-#            kubectl wait --for=condition=available --timeout=300s --all deployments        
+            cd .circleci/deployment
+            kubectl apply -f app.yml
+            kubectl logs (kubectl get po -o=name | grep capstone)
+            kubectl wait --for=condition=available --timeout=300s --all deployments        
 workflows:
   version: 2
   Capstone:
