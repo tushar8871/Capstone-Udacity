@@ -104,8 +104,7 @@ workflows:
 #      - linting:
 #          requires:
 #            - install_dependency
-       - build_docker
-#      - create_infrastructure
-       - connect_to_cluster:
-            requires:
-              build_docker
+      - build_docker
+      - connect_to_cluster:
+          requires:
+            - build_docker
