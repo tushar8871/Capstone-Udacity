@@ -63,11 +63,11 @@ jobs:
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
             dockerpath=tushar887/capstone
-            docker build -t capstone:$TAG .
+            docker build -t capstone:latest .
             docker images
-            docker tag capstone:$TAG $dockerpath:$TAG
+            docker tag capstone:$TAG $dockerpath:latest
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
-            docker push $dockerpath:$TAG
+            docker push $dockerpath:latest
       
   connect_to_cluster:
     executor: ubuntu
@@ -104,6 +104,8 @@ workflows:
 #      - linting:
 #          requires:
 #            - install_dependency
-#      - build_docker
+       - build_docker
 #      - create_infrastructure
-       - connect_to_cluster
+       - connect_to_cluster:
+            requires:
+              build_docker
