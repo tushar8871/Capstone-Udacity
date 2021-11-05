@@ -83,7 +83,9 @@ jobs:
             kubectl version --client
             sudo apt-get install docker-ce docker-ce-cli containerd.io
             docker --version
-            sudo apt-get install awscli 
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
             aws --version
       - run:
           name: Connecting cluster and worker node
