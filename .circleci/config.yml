@@ -86,13 +86,12 @@ jobs:
             sudo apt-get install awscli -y 
             aws --version
       - run:
-          name: Connecting cluster and Worker node
-          working_directory: ./.circleci/deployment/
-          commnad: |
+          name: Connecting cluster and worker node
+          working_directory: ./.circleci/cloudformation/deployment
+          command: |
             aws eks update-kubeconfig --name prod
             kubectl apply -f app.yml
-            kubectl wait --for=condition=available --timeout=300s --all deployments
-                        
+            kubectl wait --for=condition=available --timeout=300s --all deployments        
 workflows:
   version: 2
   Capstone:
