@@ -69,7 +69,7 @@ jobs:
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
             docker push $dockerpath:latest
       
-  connect_to_cluster:
+  infra_to_deploy:
     executor: ubuntu
     steps:
       - checkout
@@ -88,13 +88,20 @@ jobs:
             sudo ./aws/install
             aws --version
       - run:
+          name: Creating Infra
+          command: |
+            cd .circleci/cloudformation
+            aws cloudformation deploy --template-file netwrok.yml --stack-name udacity-network
+            eks create cluster -f eksctl.yml 
+      - run:
           name: Connecting cluster and worker node
           command: |
+            eks create cluster -f eksctl.yml
             aws eks update-kubeconfig --name prod
             kubectl get nodes
             cd .circleci/deployment
             kubectl apply -f app.yml
-            kubectl describe pods $(kubectl get po -o=name | grep capstone)
+#            kubectl describe pods $(kubectl get po -o=name | grep capstone)
 #            kubectl wait --for=condition=available --timeout=300s --all deployments        
 workflows:
   version: 2
@@ -105,6 +112,6 @@ workflows:
 #          requires:
 #            - install_dependency
       - build_docker
-      - connect_to_cluster:
+      - infra_to_deploy:
           requires:
             - build_docker
