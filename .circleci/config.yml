@@ -51,17 +51,7 @@ jobs:
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
                 chmod +x /bin/hadolint
             make install
-            make lint
-            
-  build_docker_image:
-    executor: docker-image
-    steps:
-      - checkout
-      - run:
-          name: Building Docker Image and Pushing to DockerHub
-          command: |
-            sh run_docker.sh
-            sh push_ecr.sh
+            make lint      
           
   eks_deploy:
     executor: ubuntu
@@ -81,6 +71,12 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
+
+      - run:
+          name: Building Docker Image and Pushing to DockerHub
+          command: |
+            sh run_docker.sh
+            sh push_ecr.sh  
       
       - run:
           name: Deploy to cluster
