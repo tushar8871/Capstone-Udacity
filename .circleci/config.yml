@@ -147,3 +147,6 @@ workflows:
       - eks_deploy:
           requires:
             - build_image
+      - rollout_eks_deploy:
+          requires:
+            - eks_deploy
