@@ -1,6 +1,4 @@
-#!/usr/bin/env sh
-set -e
-
+#!/usr/bin
 REGION=us-east-1
 ECR_URL=671761574982.dkr.ecr.us-east-1.amazonaws.com/capstone
 
