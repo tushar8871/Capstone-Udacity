@@ -51,8 +51,34 @@ jobs:
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
                 chmod +x /bin/hadolint
             make install
-            make lint      
-          
+            make lint 
+  
+  build_image:
+    executor: ubuntu
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Building Image
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+            echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            kubectl version --client
+            sudo apt-get install docker-ce docker-ce-cli containerd.io
+            docker --version
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            aws --version
+      
+      - run:
+          name: Building Docker Image and Pushing to DockerHub
+          command: |
+            sh run_docker.sh
+            sh push_ecr.sh
+            
   eks_deploy:
     executor: ubuntu
     steps:
@@ -72,12 +98,6 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
-
-      - run:
-          name: Building Docker Image and Pushing to DockerHub
-          command: |
-            sh run_docker.sh
-            sh push_ecr.sh
  
       - run:
           name: Deploy to cluster
@@ -96,4 +116,9 @@ workflows:
       - linting:
           requires:
             - install_dependency
-      - eks_deploy
+      - build_image:
+          requires:
+            - linting
+      - eks_deploy:
+          requires:
+            - build_image
