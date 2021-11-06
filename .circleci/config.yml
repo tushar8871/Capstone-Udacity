@@ -87,20 +87,20 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
-      - run:
-          name: Creating Infra
-          command: |
-            cd .circleci/cloudformation
-            aws cloudformation deploy --template-file netwrok.yml --stack-name udacity-network
-            eks create cluster -f eksctl.yml 
+#      - run:
+#          name: Creating Infra
+#          command: |
+#            cd .circleci/cloudformation
+#            aws cloudformation deploy --template-file netwrok.yml --stack-name udacity-network
+#            eks create cluster -f eksctl.yml 
       - run:
           name: Connecting cluster and worker node
           command: |
             eks create cluster -f eksctl.yml
-            aws eks update-kubeconfig --name prod
+            aws eks update-kubeconfig --name capstone
             kubectl get nodes
-            cd .circleci/deployment
-            kubectl apply -f app.yml
+#            cd .circleci/deployment
+#            kubectl apply -f app.yml
 #            kubectl describe pods $(kubectl get po -o=name | grep capstone)
 #            kubectl wait --for=condition=available --timeout=300s --all deployments        
 workflows:
