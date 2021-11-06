@@ -12,5 +12,5 @@ docker build -t capstone .
 docker images
 
 # Step 3: 
-# Run flask app
-docker run -it -p 80:8080 --name capstone-container capstone:latest
+# Run Capstone app
+#docker run -it -p 80:8080 --name capstone-container capstone:latest

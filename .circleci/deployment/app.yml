@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: capstone
-        image: tushar887/capstone:latest
+        image: 671761574982.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

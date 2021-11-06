@@ -52,24 +52,18 @@ jobs:
                 chmod +x /bin/hadolint
             make install
             make lint
-           
-  build_docker:
+            
+  build_docker_image:
     executor: docker-image
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Building Docker Image and Pushing to DockerHub
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
-            dockerpath=tushar887/capstone
-            docker build -t capstone:latest .
-            docker images
-            docker tag capstone:latest $dockerpath:latest
-            docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
-            docker push $dockerpath:latest
-      
-  infra_to_deploy:
+            sh run_docker.sh
+            sh push_ecr.sh
+          
+  eks_deploy:
     executor: ubuntu
     steps:
       - checkout
@@ -87,22 +81,14 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
-#      - run:
-#          name: Creating Infra
-#          command: |
-#            cd .circleci/cloudformation
-#            aws cloudformation deploy --template-file netwrok.yml --stack-name udacity-network
-#            eks create cluster -f eksctl.yml 
       - run:
-          name: Connecting cluster and worker node
+          name: Deploy to cluster
           command: |
-            eks create cluster -f eksctl.yml
+#            eks create cluster -f eksctl.yml
             aws eks update-kubeconfig --name capstone
             kubectl get nodes
-#            cd .circleci/deployment
-#            kubectl apply -f app.yml
-#            kubectl describe pods $(kubectl get po -o=name | grep capstone)
-#            kubectl wait --for=condition=available --timeout=300s --all deployments        
+            sh run_kubernetes.sh
+            kubectl get pods
 workflows:
   version: 2
   Capstone:
@@ -111,7 +97,7 @@ workflows:
 #      - linting:
 #          requires:
 #            - install_dependency
-      - build_docker
-      - infra_to_deploy:
+      - build_docker_image
+      - eks_deploy:
           requires:
-            - build_docker
+            - build_docker_image
