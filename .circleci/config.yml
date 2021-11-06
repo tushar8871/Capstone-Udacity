@@ -84,7 +84,7 @@ jobs:
           command: |
             aws eks update-kubeconfig --name capstone
             kubectl get nodes
-            sh run_kubernetes.sh
+            sh run_kuberenetes.sh
             kubectl get pods
       
 workflows:
