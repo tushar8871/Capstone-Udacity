@@ -20,4 +20,4 @@ kubectl get pods
 
 # Step 4:
 # Forward the container port to a host
-#kubectl port-forward $(kubectl get po -o=name | grep pod/capstone) 80:8080
+kubectl port-forward $(kubectl get po -o=name | grep capstone) 80:8080
