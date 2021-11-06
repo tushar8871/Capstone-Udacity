@@ -1,5 +1,5 @@
 
-#!/usr/bin/env bash
+#!/usr/bin/
 
 # Step 1:
 # Build image
