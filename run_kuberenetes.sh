@@ -11,7 +11,7 @@ aws ecr get-login-password --region us-east-1
 kubectl apply -f ./.circleci/deployment/app.yml
 #kubectl apply -f ./.circleci/deployment/loadbalancer.yml
 
-read -p "Pause Time 5 seconds" -t 5
+read  -t 15 -p "Pause Time 5 seconds"
 
 echo "Continuing......."
 # Step 3:
