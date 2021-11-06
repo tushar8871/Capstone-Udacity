@@ -5,7 +5,7 @@ metadata:
   labels:
     app: capstone
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: capstone
@@ -37,18 +37,3 @@ spec:
       port: 80
       targetPort: 8080
       
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: capstone-ing
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /
-            backend:
-              serviceName: capstone-svc
-              servicePort: 80
