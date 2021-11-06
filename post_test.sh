@@ -1,5 +1,5 @@
 aws eks update-kubeconfig --name capstone
-APP_URL=$(kubectl get service capstone=svc | grep 'amazonaws.com' | awk '{print $4}')
+APP_URL=$(kubectl get service capstone-svc | grep 'amazonaws.com' | awk '{print $4}')
 sleep 30
 OUTPUT=$(curl --silent ${APP_URL})
 STATUS_CODE=$(curl -o /dev/null --silent -w "%{http_code}\n" ${APP_URL})
