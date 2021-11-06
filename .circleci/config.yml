@@ -81,14 +81,15 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             aws --version
+      
       - run:
           name: Deploy to cluster
           command: |
-#            eks create cluster -f eksctl.yml
             aws eks update-kubeconfig --name capstone
             kubectl get nodes
             sh run_kubernetes.sh
             kubectl get pods
+      
 workflows:
   version: 2
   Capstone:
