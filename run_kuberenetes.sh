@@ -9,7 +9,7 @@ aws ecr get-login-password --region us-east-1
 # Step 2
 # Run the Docker Hub container with kubernetes
 kubectl apply -f ./.circleci/deployment/app.yml
-kubectl apply -f ./.circleci/deployment/loadbalancer.yml
+#kubectl apply -f ./.circleci/deployment/loadbalancer.yml
 
 read -p "Pause Time 5 seconds" -t 5
 
