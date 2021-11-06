@@ -174,3 +174,6 @@ workflows:
       - rollout_eks_deploy:
           requires:
             - eks_deploy
+      - post_deployment_test:
+          requires:
+            - rollout_eks_deploy
