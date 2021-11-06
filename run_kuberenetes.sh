@@ -18,6 +18,3 @@ echo "Continuing......."
 # List kubernetes pods
 kubectl get pods
 
-# Step 4:
-# Forward the container port to a host
-kubectl port-forward $(kubectl get po -o=name | grep capstone) 80:8080

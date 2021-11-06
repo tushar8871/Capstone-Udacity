@@ -86,13 +86,14 @@ jobs:
             kubectl get nodes
             sh run_kuberenetes.sh
             kubectl get pods
+            kubectl get svc
       
 workflows:
   version: 2
   Capstone:
     jobs:
-#      - install_dependency
-#      - linting:
-#          requires:
-#            - install_dependency
+      - install_dependency
+      - linting:
+          requires:
+            - install_dependency
       - eks_deploy
