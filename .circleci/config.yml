@@ -94,7 +94,4 @@ workflows:
 #      - linting:
 #          requires:
 #            - install_dependency
-      - build_docker_image
-      - eks_deploy:
-          requires:
-            - build_docker_image
+      - eks_deploy
