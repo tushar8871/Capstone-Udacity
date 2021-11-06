@@ -75,8 +75,8 @@ jobs:
       - run:
           name: Building Docker Image and Pushing to DockerHub
           command: |
-            sudo systemctl start docker 
-            sudo systemctl status docker
+            sudo service docker start 
+            sudo service docker status
             sh run_docker.sh
             sh push_ecr.sh
  
