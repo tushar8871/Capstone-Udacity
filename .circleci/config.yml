@@ -57,6 +57,7 @@ jobs:
     executor: ubuntu
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Install Dependencies
           command:  |
@@ -75,8 +76,6 @@ jobs:
       - run:
           name: Building Docker Image and Pushing to DockerHub
           command: |
-            sudo service docker start 
-            sudo service docker status
             sh run_docker.sh
             sh push_ecr.sh
  
