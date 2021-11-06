@@ -21,15 +21,16 @@ The CI/CD pipeline for microservices applications is developed with `rolling dep
 |:---- |:----------- |
 | `.circleci` | Contains the config.yml where the build stages for this project are defined and a Makefile for cleaning up the environment. |
 | `.circleci/cloudformation/netwrok` | Contains a Cloud Formation script for initializing the network infrastructure. |
-| `.circleci/cloudformation/iam-role` | Contains a Cloud Formation script for initializing the cluster with the proper roles and permissions. |
-| `.circleci/cloudformation/eks-cluster` | Contains the EKS cluster configuration files which will be used for setting up the Kubernetes cluster using cloudformation. |
-| `.circleci/cloudformation/eks-node-group` | Contains the node group configuration files which will be used as worker node for cluster. |
-| `.circleci/cloudformation/aws-auth-cm` | Contains a kuberenetes yaml script having Config map of worker node to cluster. |
+| `.circleci/cloudformation/nodegroup` | Contains the EKS nodegroup configuration which will be used for setting up thenodes for cluster using cloudformation. |
 | `.circleci/deployment/app` | Contains a deployment script which will be using docker image to create a pod in a cluster. |
 | `Dockerfile` | Conatins a script by which one can create Docker image. |
 | `Makefile` | Contains a script to run python application. |
 | `app.py` | Contains an application code. |
 | `requirements.txt` | Contains a prerequisties to run this application. |
+| `run_docker.sh` | Contains a docker commands to build containerized image for this application. |
+| `pus_ecr.sh` | Contains instructions to push image to AWS ECR(Elastic Container Registry) of this application. |
+| `run_kuberenetes.sh` | Instructions to deploy application on the pods. |
+| `post_test.sh` | Test application is susccessfully deployed or not. |
 | `README.md` | This file you are actually reading. |
 
 ### Prerequisites
@@ -54,3 +55,5 @@ eksctl create cluster --name <cluster-name> --version 1.16 --nodegroup-name stan
 | `Lint Dockerfile` | Lints the Dockerfile. |
 | `Build Docker` | Build a Docker container image and pushes it to DockerHub. |
 | `Deploy to Kubernetes` | Deploys the newly created Docker image on the Kubernetes cluster. |
+| `Rollout deployment` | Rollout deployment of application on the Kubernetes cluster. |
+| `Post deployment testing` | Test will check your application successfully deployed or not. |
