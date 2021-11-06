@@ -75,15 +75,11 @@ jobs:
       - run:
           name: Building Docker Image and Pushing to DockerHub
           command: |
-            sudo docker build -t capstone .
-            sudo docker images
-            REGION=${AWS_DEFAULT_REGION}
-            ECR_URL=671761574982.dkr.ecr.us-east-1.amazonaws.com/capstone
-            $(aws ecr get-login --no-include-email --region $REGION)
-            sudo docker build -t $ECR_URL  .
-            sudo docker tag $ECR_URL $ECR_URL:latest
-            sudo docker push $ECR_URL:latest
-
+            sudo systemctl start docker 
+            sudo systemctl status docker
+            sh run_docker.sh
+            sh push_ecr.sh
+ 
       - run:
           name: Deploy to cluster
           command: |
