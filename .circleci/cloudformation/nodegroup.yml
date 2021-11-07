@@ -7,14 +7,13 @@ nodeGroups:
   - name: ng-1
     instanceType: t3.small
     desiredCapacity: 2
-    privateNetworking: true
 vpc:
   subnets:
-    private:
+    public:
       us-east-1a:
-        id: "subnet-0f9db06af54e49f2e"
+        id: "subnet-0fabb4fa2f6f02891"
       us-east-1b:
-        id: "subnet-0c261b9f541593789"
+        id: "subnet-0a4f9a2462d704a59"
   clusterEndpoints:
     publicAccess:  true
     privateAccess: true

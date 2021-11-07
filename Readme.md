@@ -2,6 +2,8 @@
 
 # Cloud Devops Engineer Capstone -- Udacity
 
+### Github URL : https://github.com/tushar8871/Capstone-Udacity.git 
+
 ## About The Project
 
 The project is a part from Udacity Nanodegree.
@@ -23,6 +25,7 @@ The CI/CD pipeline for microservices applications is developed with `rolling dep
 | `.circleci/cloudformation/netwrok` | Contains a Cloud Formation script for initializing the network infrastructure. |
 | `.circleci/cloudformation/nodegroup` | Contains the EKS nodegroup configuration which will be used for setting up thenodes for cluster using cloudformation. |
 | `.circleci/deployment/app` | Contains a deployment script which will be using docker image to create a pod in a cluster. |
+| `screenshots` | Contains all the screenshots required to review the project. |
 | `Dockerfile` | Conatins a script by which one can create Docker image. |
 | `Makefile` | Contains a script to run python application. |
 | `app.py` | Contains an application code. |
